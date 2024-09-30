@@ -1,0 +1,1 @@
+create schema if not exists 2024_mariano_gomez_schema;
