@@ -1,0 +1,8 @@
+# Ignorar todos los archivos Parquet
+*.parquet
+
+# Ignorar archivos generados por Airflow
+/dags/__pycache__/
+/logs/
+airflow.cfg
+airflow.db
