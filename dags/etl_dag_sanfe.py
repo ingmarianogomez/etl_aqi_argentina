@@ -30,7 +30,7 @@ def extract_city(**kwargs):
     query = 'select c.city,c.state, c.country from "2024_mariano_gomez_schema".city c where c.state = \'Santa Fe\''
     df = pd.read_sql(query, redshift_conn_string)
     
-    path = os.path.join(output_parquet, 'extract_city.parquet')
+    path = os.path.join(output_parquet, 'extract_city4.parquet')
     df.to_parquet(path, index=False)
     
     return path
@@ -86,7 +86,7 @@ def transform_data(**kwargs):
     
     df_transformed = df_respuestas[["city", "current_pollution_ts", "current_pollution_aqius", "current_pollution_mainus", "current_pollution_aqicn", "current_pollution_maincn", "current_weather_ts", "current_weather_tp", "current_weather_pr", "current_weather_hu", "current_weather_ws", "current_weather_wd"]]
 
-    path = os.path.join(output_parquet, 'transform_data.parquet')
+    path = os.path.join(output_parquet, 'transform_data4.parquet')
 
     # Save the transformed data to another Parquet file
     df_transformed.to_parquet(path, index=False)
