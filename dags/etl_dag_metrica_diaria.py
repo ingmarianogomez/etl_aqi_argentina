@@ -49,7 +49,6 @@ def e_metrica(**kwargs):
     
     return path
 
-#def transform_data(input_parquet:str, output_parquet:str):
 def transform_data(**kwargs):
     input_parquet_diaria = kwargs['ti'].xcom_pull(task_ids='e_metrica')
     input_parquet_avg = kwargs['ti'].xcom_pull(task_ids='e_avg')
@@ -66,7 +65,6 @@ def transform_data(**kwargs):
     print(f"Data transformed and saved to {path}")
     return path
 
-#def load_to_redshift(transformed_parquet: str, redshift_table: str, redshift_conn_string: str, schema: str = "2024_mariano_gomez_schema"):
 def load_to_redshift(**kwargs):
     transformed_parquet = kwargs['ti'].xcom_pull(task_ids='transform_data')
     redshift_table = kwargs['redshift_table']

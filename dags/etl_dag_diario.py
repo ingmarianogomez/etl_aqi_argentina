@@ -37,7 +37,6 @@ def et_redshift(**kwargs):
         print('Error en la carga de data')
     return path
 
-#def load_to_redshift(transformed_parquet: str, redshift_table: str, redshift_conn_string: str, schema: str = "2024_mariano_gomez_schema"):
 def load_to_redshift(**kwargs):
     transformed_parquet = kwargs['ti'].xcom_pull(task_ids='et_redshift')
     redshift_table = kwargs['redshift_table']
