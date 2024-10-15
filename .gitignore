@@ -12,6 +12,7 @@ webserver_config.py
 
 # Entorno virtual
 venv/
+venv2/
 
 # Variables de entorno
 .env

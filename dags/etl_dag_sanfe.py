@@ -4,7 +4,6 @@ import pandas as pd
 import os
 from urllib.parse import quote_plus
 from airflow import DAG
-from airflow.exceptions import AirflowSkipException
 from airflow.operators.python import PythonOperator
 from datetime import datetime
 
@@ -22,7 +21,6 @@ SCHEMA = "2024_mariano_gomez_schema"
 # URL de la API
 url = 'http://api.airvisual.com/v2/city'
 
-#def extract_city(output_parquet:str, redshift_conn_string: str):
 def extract_city(**kwargs):
     output_parquet = kwargs['output_parquet']
     redshift_conn_string = kwargs['redshift_conn_string']
@@ -35,7 +33,6 @@ def extract_city(**kwargs):
     
     return path
 
-#def transform_data(input_parquet:str, output_parquet:str):
 def transform_data(**kwargs):
     input_parquet = kwargs['ti'].xcom_pull(task_ids='extract_city')
     output_parquet = kwargs['output_parquet']
@@ -57,7 +54,7 @@ def transform_data(**kwargs):
         }
         
         response = requests.get(url, params=params)
-        api_response = response.json()  # Ajusta según el formato de respuesta
+        api_response = response.json()
         
         # Unificar en un archivo
         city_array.append(api_response)
@@ -88,31 +85,23 @@ def transform_data(**kwargs):
 
     path = os.path.join(output_parquet, 'transform_data4.parquet')
 
-    # Save the transformed data to another Parquet file
     df_transformed.to_parquet(path, index=False)
 
     print(f"Data transformed and saved to {path}")
     return path
 
-#def load_to_redshift(transformed_parquet: str, redshift_table: str, redshift_conn_string: str, schema: str = "2024_mariano_gomez_schema"):
 def load_to_redshift(**kwargs):
     transformed_parquet = kwargs['ti'].xcom_pull(task_ids='transform_data')
     redshift_table = kwargs['redshift_table']
     redshift_conn_string = kwargs['redshift_conn_string']
     schema = kwargs['schema']
     
-    # Load transformed data from Parquet
     df = pd.read_parquet(transformed_parquet)
     
-    # Create SQLAlchemy engine for Redshift
     engine = create_engine(redshift_conn_string)
 
-    # Load data to Redshift table
-    try:
-        df.to_sql(redshift_table, engine, schema, if_exists='append', index=False, method='multi')
-        print(f"Data loaded into Redshift table {redshift_table}")
-    except Exception as e:
-        print(f"Error al conectar a Redshift: {e}")
+    df.to_sql(redshift_table, engine, schema, if_exists='append', index=False, method='multi')
+    print(f"Data loaded into Redshift table {redshift_table}")
         
 # Define DAG
 with DAG(
