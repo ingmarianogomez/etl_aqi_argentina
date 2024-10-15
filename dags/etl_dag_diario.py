@@ -50,11 +50,8 @@ def load_to_redshift(**kwargs):
     engine = create_engine(redshift_conn_string)
 
     # Load data to Redshift table
-    try:
-        df.to_sql(redshift_table, engine, schema, if_exists='replace', index=False, method='multi')
-        print(f"Data loaded into Redshift table {redshift_table}")
-    except Exception as e:
-        print(f"Error al conectar a Redshift: {e}")
+    df.to_sql(redshift_table, engine, schema, if_exists='replace', index=False, method='multi')
+    print(f"Data loaded into Redshift table {redshift_table}")
         
 # Define DAG
 with DAG(

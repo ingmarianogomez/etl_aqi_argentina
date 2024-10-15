@@ -23,11 +23,9 @@ def e_avg(**kwargs):
     output_parquet = kwargs['output_parquet']
     redshift_conn_string = kwargs['redshift_conn_string']
     redshift_historico = kwargs['redshift_historico']
-    try:
-        engine = create_engine(redshift_conn_string)
-        df = pd.read_sql(f'SELECT city,AVG(max_aqius)as "avg_3_aqius", AVG(max_aqicn) as "avg_3_aqicn", MAX(fecha) as "fecha_avg" FROM "2024_mariano_gomez_schema".{redshift_historico} where fecha > (CURRENT_DATE)-4 group by city', engine)
-    except Exception as e:
-        print(f"Error: {e}")
+    
+    engine = create_engine(redshift_conn_string)
+    df = pd.read_sql(f'SELECT city,AVG(max_aqius)as "avg_3_aqius", AVG(max_aqicn) as "avg_3_aqicn", MAX(fecha) as "fecha_avg" FROM "2024_mariano_gomez_schema".{redshift_historico} where fecha > (CURRENT_DATE)-4 group by city', engine)
     
     path = os.path.join(output_parquet, 'avg_3.parquet')
     df.to_parquet(path, index=False)
@@ -38,11 +36,9 @@ def e_metrica(**kwargs):
     output_parquet = kwargs['output_parquet']
     redshift_conn_string = kwargs['redshift_conn_string']
     redshift_aqi_info_diaria = kwargs['redshift_aqi_info_diaria']
-    try:
-        engine = create_engine(redshift_conn_string)
-        df = pd.read_sql(f'SELECT city, DATE(current_pollution_ts) as "fecha", MAX(current_pollution_aqius) as "max_aqius",MAX(current_pollution_aqicn) as "max_aqicn", AVG(current_weather_tp) as "avg_temp",MAX(current_weather_tp) as "max_temp",MAX(current_weather_pr) as "max_pre",MAX(current_weather_hu) as "max_hum" FROM "2024_mariano_gomez_schema".{redshift_aqi_info_diaria} d group by city, DATE(current_pollution_ts)', engine)
-    except Exception as e:
-        print(f"Error: {e}")
+    
+    engine = create_engine(redshift_conn_string)
+    df = pd.read_sql(f'SELECT city, DATE(current_pollution_ts) as "fecha", MAX(current_pollution_aqius) as "max_aqius",MAX(current_pollution_aqicn) as "max_aqicn", AVG(current_weather_tp) as "avg_temp",MAX(current_weather_tp) as "max_temp",MAX(current_weather_pr) as "max_pre",MAX(current_weather_hu) as "max_hum" FROM "2024_mariano_gomez_schema".{redshift_aqi_info_diaria} d group by city, DATE(current_pollution_ts)', engine)
     
     path = os.path.join(output_parquet, 'metrica_diaria.parquet')
     df.to_parquet(path, index=False)
@@ -78,11 +74,8 @@ def load_to_redshift(**kwargs):
     engine = create_engine(redshift_conn_string)
 
     # Load data to Redshift table
-    try:
-        df.to_sql(redshift_table, engine, schema, if_exists='replace', index=False, method='multi')
-        print(f"Data loaded into Redshift table {redshift_table}")
-    except Exception as e:
-        print(f"Error al conectar a Redshift: {e}")
+    df.to_sql(redshift_table, engine, schema, if_exists='replace', index=False, method='multi')
+    print(f"Data loaded into Redshift table {redshift_table}")
         
 # Define DAG
 with DAG(
@@ -108,7 +101,7 @@ with DAG(
                    'redshift_historico': REDSHIFT_TABLE_CONSULTA_AVG},
     )
 
-    # Task 2: Extract data
+    # Task 2: Extract data from aqi_info_diaria
     extract_task2 = PythonOperator(
         task_id='e_metrica',
         python_callable=e_metrica,

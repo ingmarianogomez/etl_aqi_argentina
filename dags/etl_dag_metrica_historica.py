@@ -22,11 +22,9 @@ def e_metrica(**kwargs):
     redshift_conn_string = kwargs['redshift_conn_string']
     redshift_metrica = kwargs['redshift_metrica']
     output_parquet = kwargs['output_parquet']
-    try:
-        engine = create_engine(redshift_conn_string)
-        df = pd.read_sql(f'SELECT * FROM "2024_mariano_gomez_schema".{redshift_metrica}', engine)
-    except Exception as e:
-        print(f"Error: {e}")
+    
+    engine = create_engine(redshift_conn_string)
+    df = pd.read_sql(f'SELECT * FROM "2024_mariano_gomez_schema".{redshift_metrica}', engine)
     
     path = os.path.join(output_parquet, 'metrica_historico.parquet')
     df.to_parquet(path, index=False)
@@ -46,11 +44,8 @@ def load_to_redshift(**kwargs):
     engine = create_engine(redshift_conn_string)
 
     # Load data to Redshift table
-    try:
-        df.to_sql(redshift_table, engine, schema, if_exists='append', index=False, method='multi')
-        print(f"Data loaded into Redshift table {redshift_table}")
-    except Exception as e:
-        print(f"Error al conectar a Redshift: {e}")
+    df.to_sql(redshift_table, engine, schema, if_exists='append', index=False, method='multi')
+    print(f"Data loaded into Redshift table {redshift_table}")
 
 # Define DAG
 with DAG(
