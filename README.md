@@ -4,7 +4,7 @@
 
 El proyecto es un ETL que se comporta de la siguiente forma:
 
-- Extract (E): Se obtiene informacion específica de una ciudad, con su contaminación y clima actual, consultando una API de la siguiente forma 
+- Extract (E): Se obtiene informacion específica ciudades argentinas, con su contaminación y clima actual, consultando una API de la siguiente forma 
  
 ```https
   GET api.airvisual.com/v2/city?
@@ -13,9 +13,9 @@ El proyecto es un ETL que se comporta de la siguiente forma:
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `api_key` | `string` | **Required**. Your API key |
-| `city` | `string` | **Required**. Your API key |
-| `state` | `string` | **Required**. Your API key |
-| `country` | `string` | **Required**. Your API key |
+| `city` | `string` | **Required** |
+| `state` | `string` | **Required** |
+| `country` | `string` | **Required** |
 
 - Transform (T): La información extraida es transformada mediante funciones de Pandas y query SQL, utilizando archivos parquet para almacenar archivos intermedios.
 

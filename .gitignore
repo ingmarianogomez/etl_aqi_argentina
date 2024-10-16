@@ -15,4 +15,4 @@ venv/
 venv2/
 
 # Variables de entorno
-.env
+*.env

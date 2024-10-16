@@ -5,8 +5,8 @@ from unittest.mock import patch, MagicMock
 from dags.etl_dag_sanfe import transform_data
 
 # Simula las variables de entorno necesarias
-os.environ["API_KEY"] = "falsa_api_key"  # Simula la variable de entorno para la API
-url = 'http://api.airvisual.com'  # Asegúrate de que esto sea accesible
+os.environ["API_KEY"] = "falsa_api_key"
+url = 'http://api.airvisual.com'
 
 def test_transform_data():
     # Configurar mocks
