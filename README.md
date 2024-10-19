@@ -62,6 +62,7 @@ Instalar las dependencias
 Para iniciar la base de datos, configurar el entorno y arrancar tanto el servidor web como el scheduler ejecutar
 
 ```bash
+   export PYTHONPATH=$(pwd)
    AIRFLOW_HOME=$(pwd) airflow standalone
 ```
 

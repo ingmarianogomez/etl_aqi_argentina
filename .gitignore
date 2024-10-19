@@ -3,6 +3,8 @@
 
 # Ignorar archivos generados por Airflow
 /dags/__pycache__/
+*/__pycache__/
+*/__pycache__/*
 /logs/
 airflow.cfg
 airflow.db
@@ -13,6 +15,13 @@ webserver_config.py
 # Entorno virtual
 venv/
 venv2/
+
+# Tests
+tests/__pycache__/
+__pycache__/
+
+#cache
+.pytest_cache
 
 # Variables de entorno
 *.env
