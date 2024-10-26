@@ -4,6 +4,7 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime
 from etl_modules.extract_met_avg import e_metrica
 from etl_modules.load_to_redshift import load_to_redshift
+from etl_modules.print_grafico import print_grafico
 
 DATA_PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -39,5 +40,20 @@ with DAG(
                    'if_exists': 'append'},
     )
     
+    # Task 3: Imprimir informe diario AQI US
+    print_inform_us = PythonOperator(
+        task_id='print_inform_us',
+        python_callable=print_grafico,
+        op_kwargs={'pais_indice': 'AQI US',
+                   'campo_pais_indice': 'current_pollution_aqius'},
+    )
+    # Task 4: Imprimir informe diario AQI CN
+    print_inform_cn = PythonOperator(
+        task_id='print_inform_cn',
+        python_callable=print_grafico,
+        op_kwargs={'pais_indice': 'AQI CN',
+                   'campo_pais_indice': 'current_pollution_aqicn'},
+    )
+    
     # Set task dependencies
-    extract_task >> load_task
+    extract_task >> load_task >> print_inform_us >> print_inform_cn

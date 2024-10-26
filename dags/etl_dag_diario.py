@@ -6,6 +6,10 @@ from etl_modules.et_redshift_diario import et_redshift
 from etl_modules.load_to_redshift import load_to_redshift
 
 DATA_PATH = os.path.dirname(os.path.realpath(__file__))
+
+def extract_data(**context):
+    fecha_hoy = context["ds"]
+    return(et_redshift(output_parquet=DATA_PATH, fecha_hoy=fecha_hoy))
         
 # Define DAG
 with DAG(
@@ -25,8 +29,8 @@ with DAG(
     # Task 1: Extract data
     extract_task = PythonOperator(
         task_id='transform_data',
-        python_callable=et_redshift,
-        op_kwargs={'output_parquet': DATA_PATH},
+        python_callable=extract_data,
+        provide_context=True
     )
 
     # Task 2: Load data into Redshift

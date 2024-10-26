@@ -25,3 +25,6 @@ __pycache__/
 
 # Variables de entorno
 *.env
+
+# Grafico impresos
+*.png

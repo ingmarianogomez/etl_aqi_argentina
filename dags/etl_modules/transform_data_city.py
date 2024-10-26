@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 import os
+import time
 from dags.config.config import url, API_KEY
 
 
@@ -30,6 +31,9 @@ def transform_data(**kwargs):
         
         # Unificar en un archivo
         city_array.append(api_response)
+        
+        # Esperar lapso para que no superar las llamadas permitidas
+        time.sleep(12)
         
     #convertir a dataframe
     df_respuestas = pd.json_normalize(

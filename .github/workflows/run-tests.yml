@@ -27,6 +27,9 @@ jobs:
         run: |
           poetry install
 
+      # - name: Set PYTHONPATH
+      #   run: echo "PYTHONPATH=$(pwd):$(pwd)/dags" >> $GITHUB_ENV
+
       - name: Run pytest
         run: |
           poetry run python -m pytest tests
