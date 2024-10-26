@@ -9,7 +9,7 @@ from dags.etl_modules.extract_city import extract_city
 @patch.object(pd.DataFrame, 'to_parquet')
 def test_extract_city(mock_to_parquet, mock_path_join, mock_read_sql): #Los mock pasados como parametro se pasan en forma inversa a como fueron creados
     output_parquet = '.'  
-    state = 'Santa Fe'  
+    country = 'Argentina'  
     parquet_name = 'extract_city4.parquet'  
 
     # Dataframe que simulara la salida del SQL
@@ -25,7 +25,7 @@ def test_extract_city(mock_to_parquet, mock_path_join, mock_read_sql): #Los mock
     mock_path_join.return_value = os.path.join(output_parquet, parquet_name)
 
     # Ejecutamos la funcion y guardamos en result en el return
-    result = extract_city(output_parquet=output_parquet, state=state, parquet_name=parquet_name)
+    result = extract_city(output_parquet=output_parquet, country=country, parquet_name=parquet_name)
 
     # Verificar que la función devolvió la ruta correcta
     assert result == os.path.join(output_parquet, parquet_name)
