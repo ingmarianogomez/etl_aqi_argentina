@@ -27,4 +27,4 @@ __pycache__/
 *.env
 
 # Grafico impresos
-*plot.png
+#*plot.png
